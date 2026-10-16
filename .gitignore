@@ -1,0 +1,27 @@
+# Visual Studio temporary files
+.vs/
+*.VC.db
+*.opendb
+*.suo
+*.user
+
+# Compiler intermediate outputs
+*.obj
+*.ilk
+*.pdb
+*.exp
+*.tlog
+*.idb
+**/build/
+**/build/*.obj
+**/build/*.exp
+**/build/*.ilk
+**/build/*.pdb
+
+# Log files and crash dumps
+*.log
+*.dmp
+
+# Test & scratch files
+test_*
+scratch/

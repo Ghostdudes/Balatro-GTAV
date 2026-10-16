@@ -1,0 +1,83 @@
+[manifest]
+version = "1.0.0"
+priority = 100
+
+[[patches]]
+[patches.module]
+source = "balatro_bridge.lua"
+before = "main.lua"
+name = "balatro_bridge"
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "function love.errhand(msg)"
+position = "after"
+match_indent = true
+payload = '''
+    local f = io.open("C:\\Users\\micrs\\AppData\\Roaming\\Balatro\\bridge_debug.log", "a")
+    if f then
+        f:write("love.errhand() CALLED: " .. tostring(msg) .. "\n" .. debug.traceback() .. "\n")
+        f:close()
+    end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "function love.quit()"
+position = "after"
+match_indent = true
+payload = '''
+    local f = io.open("C:\\Users\\micrs\\AppData\\Roaming\\Balatro\\bridge_debug.log", "a")
+    if f then
+        f:write("love.quit() CALLED!\n" .. debug.traceback() .. "\n")
+        f:close()
+    end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "require \"game\""
+position = "after"
+match_indent = true
+payload = '''
+local BalatroBridge = require("balatro_bridge")
+'''
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "function love.load()"
+position = "after"
+match_indent = true
+payload = '''
+    if BalatroBridge and BalatroBridge.init then
+        BalatroBridge.init()
+    end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "function love.update( dt )"
+position = "after"
+match_indent = true
+payload = '''
+    if BalatroBridge and BalatroBridge.update then
+        BalatroBridge.update(dt)
+    end
+'''
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = "G:draw()"
+position = "after"
+match_indent = true
+payload = '''
+    if BalatroBridge and BalatroBridge.draw then
+        BalatroBridge.draw()
+    end
+'''
